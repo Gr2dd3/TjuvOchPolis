@@ -21,6 +21,7 @@ namespace TjuvarOchPoliser
             return persons;
         }
 
+        // Creates a random number for Direction property
         // Skapar en random siffra för Direction prop
         public Person()
         {
