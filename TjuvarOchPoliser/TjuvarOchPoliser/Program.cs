@@ -11,5 +11,7 @@ internal class Program
         Console.WriteLine("Gr2dd3 också");
 
         Console.WriteLine("Hanna & Jonna, where are you?");
+
+        Console.WriteLine("hejhej");
     }
 }
