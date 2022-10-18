@@ -8,18 +8,9 @@ namespace TjuvarOchPoliser
 {
     internal class Person
     {
-        public List<Thing> Inventory { get; set; }
         public int Direction { get; set; }
-
         public int Xpos { get; set; }
         public int Ypos { get; set; }
-
-
-        //Kalla på för att fortsätta flytta person
-        public virtual List<Person> Movement(List<Person> persons)
-        {
-            return persons;
-        }
 
         // Creates a random number for Direction property
         // Skapar en random siffra för Direction prop
@@ -32,6 +23,39 @@ namespace TjuvarOchPoliser
 
             Direction = rnd.Next(6);
         }
+
+        //Kalla på för att fortsätta flytta person
+        public virtual void Movement(List<Person> persons)
+        {
+            foreach (Person person in persons)
+            {
+                switch (person.Direction)
+                {
+                    case 0:     // Neråt
+                        person.Ypos++;
+                        break;
+                    case 1:     // Vänster ner
+                        person.Ypos++;
+                        person.Xpos--;
+                        break;
+                    case 2:     // Vänster
+                        person.Xpos--;
+                        break;
+                    case 3:     // Uppåt
+                        person.Ypos--;
+                        break;
+                    case 4:     // Höger uppåt
+                        person.Ypos--;
+                        person.Xpos++;
+                        break;
+                    case 5:     // Höger
+                        person.Xpos++;
+                        break;
+                }
+            }
+        }
+
+
     }
 
 
@@ -39,36 +63,36 @@ namespace TjuvarOchPoliser
     {
         public List<string> Belongings { get; set; }
 
-        public override List<Person> Movement(List<Person> persons)
-        {
-            foreach (Person person in persons)
-            {
-                switch (person.Direction)
-                {
-                    case 0:
-                        person.Ypos++;
-                        break;
-                    case 1:
-                        person.Ypos++;
-                        person.Xpos--;
-                        break;
-                    case 2:
-                        person.Xpos--;
-                        break;
-                    case 3:
-                        person.Ypos--;
-                        break;
-                    case 4:
-                        person.Ypos--;
-                        person.Xpos++;
-                        break;
-                    case 5:
-                        person.Xpos++;
-                        break;
-                }
-            }
-            return persons;
-        }
+        //public override List<Person> Movement(List<Person> persons)
+        //{
+        //    foreach (Person person in persons)
+        //    {
+        //        switch (person.Direction)
+        //        {
+        //            case 0:
+        //                person.Ypos++;
+        //                break;
+        //            case 1:
+        //                person.Ypos++;
+        //                person.Xpos--;
+        //                break;
+        //            case 2:
+        //                person.Xpos--;
+        //                break;
+        //            case 3:
+        //                person.Ypos--;
+        //                break;
+        //            case 4:
+        //                person.Ypos--;
+        //                person.Xpos++;
+        //                break;
+        //            case 5:
+        //                person.Xpos++;
+        //                break;
+        //        }
+        //    }
+        //    return persons;
+        //}
     }
 
 
@@ -76,37 +100,42 @@ namespace TjuvarOchPoliser
     internal class Police : Person
     {
         public List<Thing> SeizedGoods { get; set; }
-
-        public override List<Person> Movement(List<Person> polices)
+        public string Name { get; set; }
+        public Police()
         {
-            foreach (Police police in polices)
-            {
-                switch (police.Direction)
-                {
-                    case 0:
-                        police.Ypos++;
-                        break;
-                    case 1:
-                        police.Ypos++;
-                        police.Xpos--;
-                        break;
-                    case 2:
-                        police.Xpos--;
-                        break;
-                    case 3:
-                        police.Ypos--;
-                        break;
-                    case 4:
-                        police.Ypos--;
-                        police.Xpos++;
-                        break;
-                    case 5:
-                        police.Xpos++;
-                        break;
-                }
-            }
-            return polices;
+            Name = "P";
         }
+
+        //public override List<Person> Movement(List<Person> polices)
+        //{
+        //    foreach (Police police in polices)
+        //    {
+        //        switch (police.Direction)
+        //        {
+        //            case 0:
+        //                police.Ypos++;
+        //                break;
+        //            case 1:
+        //                police.Ypos++;
+        //                police.Xpos--;
+        //                break;
+        //            case 2:
+        //                police.Xpos--;
+        //                break;
+        //            case 3:
+        //                police.Ypos--;
+        //                break;
+        //            case 4:
+        //                police.Ypos--;
+        //                police.Xpos++;
+        //                break;
+        //            case 5:
+        //                police.Xpos++;
+        //                break;
+        //        }
+        //    }
+        //    return polices;
+        //}
     }
 
 
@@ -115,36 +144,36 @@ namespace TjuvarOchPoliser
     {
         public List<Thing> StolenGoods { get; set; }
 
-        public override List<Person> Movement(List<Person> persons)
-        {
-            foreach (Person person in persons)
-            {
-                switch (person.Direction)
-                {
-                    case 0:
-                        person.Ypos++;
-                        break;
-                    case 1:
-                        person.Ypos++;
-                        person.Xpos--;
-                        break;
-                    case 2:
-                        person.Xpos--;
-                        break;
-                    case 3:
-                        person.Ypos--;
-                        break;
-                    case 4:
-                        person.Ypos--;
-                        person.Xpos++;
-                        break;
-                    case 5:
-                        person.Xpos++;
-                        break;
-                }
-            }
-            return persons;
-        }
+        //public override List<Person> Movement(List<Person> persons)
+        //{
+        //    foreach (Person person in persons)
+        //    {
+        //        switch (person.Direction)
+        //        {
+        //            case 0:
+        //                person.Ypos++;
+        //                break;
+        //            case 1:
+        //                person.Ypos++;
+        //                person.Xpos--;
+        //                break;
+        //            case 2:
+        //                person.Xpos--;
+        //                break;
+        //            case 3:
+        //                person.Ypos--;
+        //                break;
+        //            case 4:
+        //                person.Ypos--;
+        //                person.Xpos++;
+        //                break;
+        //            case 5:
+        //                person.Xpos++;
+        //                break;
+        //        }
+        //    }
+        //    return persons;
+        //}
     }
 
 
