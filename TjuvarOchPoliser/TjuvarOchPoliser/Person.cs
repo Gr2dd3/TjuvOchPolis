@@ -11,6 +11,7 @@ namespace TjuvarOchPoliser
         public int Direction { get; set; }
         public int Xpos { get; set; }
         public int Ypos { get; set; }
+        public string Name { get; set; }
 
         // Creates a random number for Direction property
         // Skapar en random siffra för Direction prop
@@ -116,7 +117,6 @@ namespace TjuvarOchPoliser
     internal class Police : Person
     {
         public List<Thing> SeizedGoods { get; set; }
-        public string Name { get; set; }
         public Police()
         {
             Name = "P";
