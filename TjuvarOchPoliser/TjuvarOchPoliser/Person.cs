@@ -21,11 +21,12 @@ namespace TjuvarOchPoliser
             Xpos = rnd.Next(100);
             Ypos = rnd.Next(25);
 
-            Direction = rnd.Next(6);
+            Direction = rnd.Next(8);
+            
         }
 
         //Kalla på för att fortsätta flytta person
-        public virtual void Movement(List<Person> persons, string[,]city)
+        public virtual void Movement(List<Person> persons, string[,] city)
         {
             foreach (Person person in persons)
             {
@@ -33,7 +34,7 @@ namespace TjuvarOchPoliser
                 {
                     case 0:     // Neråt 
                         person.Ypos++;
-                        if (person.Ypos >= city.GetLength(0))
+                        if (person.Ypos == city.GetLength(0))
                         {
                             person.Ypos = 0;
                         }
@@ -41,12 +42,18 @@ namespace TjuvarOchPoliser
                     case 1:     // Vänster ner 
                         person.Ypos++; //ner
                         person.Xpos--; //vänster
-                        if (person.Ypos >= city.GetLength(0) && person.Xpos < 0)
+                        if (person.Ypos == city.GetLength(0))
                         {
                             person.Ypos = 0;
-                            person.Xpos %= city.GetLength(0) - 1;
+                            person.Xpos += 1;
                         }
-                            break;
+                        else if (person.Xpos < 0)
+                        {
+                            person.Xpos = city.GetLength(1) - 1;
+                            person.Ypos -= 1;
+
+                        }
+                        break;
                     case 2:     // Vänster 
                         person.Xpos--;
                         if (person.Xpos < 0)
@@ -63,13 +70,52 @@ namespace TjuvarOchPoliser
                         break;
                     case 4:     // Höger uppåt
                         person.Ypos--;
-                        person.Xpos++;
+                        person.Xpos++; 
+                        if (person.Ypos < 0)
+                        {
+                            person.Ypos = city.GetLength(0) - 1;
+                            person.Xpos -= 1;
+                        }
+                        else if (person.Xpos == city.GetLength(1))
+                        {
+                            person.Xpos = 0;
+                            person.Ypos += 1;
+
+                        }
                         break;
                     case 5:     // Höger
                         person.Xpos++;
-                        if (person.Xpos >= city.GetLength(1))
+                        if (person.Xpos == city.GetLength(1))
                         {
                             person.Xpos = 0;
+                        }
+                        break;
+                    case 6: // Höger nedåt
+                        person.Xpos++;
+                        person.Ypos++;
+                        if (person.Xpos == city.GetLength(1))
+                        {
+                            person.Xpos = 0;
+                            person.Ypos -= 1;
+                        }
+                        else if (person.Ypos == city.GetLength(0))
+                        {
+                            person.Xpos -= 1;
+                            person.Ypos = 0;
+                        }
+                        break;
+                    case 7: //Vänster uppåt
+                        person.Xpos--;
+                        person.Ypos--;
+                        if (person.Xpos < 0)
+                        {
+                            person.Xpos = city.GetLength(1) - 1;
+                            person.Ypos += 1;
+                        }
+                        else if (person.Ypos < 0)
+                        {
+                            person.Xpos += 1;
+                            person.Ypos = city.GetLength(0) - 1;
                         }
                         break;
                 }
