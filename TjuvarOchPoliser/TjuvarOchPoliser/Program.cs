@@ -8,16 +8,31 @@ internal class Program
     private static void Main(string[] args)
     {
         City city = new();
+        List<Person> thieves = new();
+        List<Person> cops = new();
+        List<Person> citizens = new();
         List<Person> persons = new();
-        Person person1 = new Person();
+        Person p = new Person();
 
 
         for (int i = 0; i < 10; i++)
         {
             Police police = new();
-            persons.Add(police);
+            cops.Add(police);
         }
-
+        for (int i = 0; i < 20; i++)
+        {
+            Thief thief = new();
+            thieves.Add(thief);
+        }
+        for (int i = 0; i < 30; i++)
+        {
+            Citizen citizen = new();
+            citizens.Add(citizen);
+        }
+        persons.AddRange(thieves);
+        persons.AddRange(cops);
+        persons.AddRange(citizens);
 
         while (true)
         {
@@ -25,11 +40,19 @@ internal class Program
             {
                 for (int cols = 0; cols < city.Matrix.GetLength(1); cols++)
                 {
-                    foreach (Person person in persons)
+                    foreach (Person person1 in persons)
                     {
-                        if (rows == person.Ypos && cols == person.Xpos)
+                        if (rows == person1.Ypos && cols == person1.Xpos)
                         {
-                            city.Matrix[rows, cols] = person.Name;
+                            if (person1 is Police)
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                            if (person1 is Thief)
+                                Console.ForegroundColor = ConsoleColor.Red;
+                            if (person1 is Citizen)
+                                Console.ForegroundColor = ConsoleColor.Green;
+                            city.Matrix[rows, cols] = person1.Name;
+
+
                         }
                         else
                         {
@@ -41,10 +64,26 @@ internal class Program
                 }
                 Console.WriteLine();
             }
-            person1.Movement(persons, city.Matrix);
+
+            Collide(cops, citizens, thieves);
+            p.Movement(persons, city.Matrix);
             Thread.Sleep(500);
             //Console.ReadKey();
             Console.Clear();
+        }
+    }
+
+    private static void Collide(List<Person> cops, List<Person> citizens, List<Person> thieves)
+    {
+        foreach (var cop in cops)
+        {
+            foreach (var thief in thieves)
+            {
+                if (cop.Xpos == thief.Xpos && cop.Ypos == thief.Ypos)
+                {
+                    // Skriv ut "X" och Seize();
+                }
+            }
         }
     }
 }
