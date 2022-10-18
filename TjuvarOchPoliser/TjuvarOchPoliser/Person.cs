@@ -25,24 +25,36 @@ namespace TjuvarOchPoliser
         }
 
         //Kalla på för att fortsätta flytta person
-        public virtual void Movement(List<Person> persons)
+        public virtual void Movement(List<Person> persons, string[,]city)
         {
             foreach (Person person in persons)
             {
                 switch (person.Direction)
                 {
-                    case 0:     // Neråt
+                    case 0:     // Neråt 
                         person.Ypos++;
+                        if (person.Ypos >= city.GetLength(0))
+                        {
+                            person.Ypos = 0;
+                        }
                         break;
-                    case 1:     // Vänster ner
+                    case 1:     // Vänster ner 
                         person.Ypos++;
                         person.Xpos--;
                         break;
-                    case 2:     // Vänster
+                    case 2:     // Vänster 
                         person.Xpos--;
+                        if (person.Xpos < 0)
+                        {
+                            person.Xpos = city.GetLength(1) - 1;
+                        }
                         break;
                     case 3:     // Uppåt
                         person.Ypos--;
+                        if (person.Ypos < 0)
+                        {
+                            person.Ypos = city.GetLength(0) - 1;
+                        }
                         break;
                     case 4:     // Höger uppåt
                         person.Ypos--;
@@ -50,6 +62,10 @@ namespace TjuvarOchPoliser
                         break;
                     case 5:     // Höger
                         person.Xpos++;
+                        if (person.Xpos >= city.GetLength(1))
+                        {
+                            person.Xpos = 0;
+                        }
                         break;
                 }
             }
