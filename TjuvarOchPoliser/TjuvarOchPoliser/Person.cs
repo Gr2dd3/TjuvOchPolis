@@ -39,9 +39,14 @@ namespace TjuvarOchPoliser
                         }
                         break;
                     case 1:     // Vänster ner 
-                        person.Ypos++;
-                        person.Xpos--;
-                        break;
+                        person.Ypos++; //ner
+                        person.Xpos--; //vänster
+                        if (person.Ypos >= city.GetLength(0) && person.Xpos < 0)
+                        {
+                            person.Ypos = 0;
+                            person.Xpos %= city.GetLength(0) - 1;
+                        }
+                            break;
                     case 2:     // Vänster 
                         person.Xpos--;
                         if (person.Xpos < 0)
