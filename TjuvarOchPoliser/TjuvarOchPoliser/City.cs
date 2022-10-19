@@ -10,11 +10,11 @@ namespace TjuvarOchPoliser
     {
         public int RobbedCounter { get; set; }
         public int SeizedCounter { get; set; }
-        public string[,] Matrix { get; set; }
+        public Person[,] Matrix { get; set; }
 
         public City()
         {
-            Matrix = new string[25, 100];
+            Matrix = new Person[25, 100];
         }
 
     }

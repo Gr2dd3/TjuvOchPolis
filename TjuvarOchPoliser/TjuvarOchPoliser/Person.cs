@@ -9,113 +9,112 @@ namespace TjuvarOchPoliser
     internal class Person
     {
         public int Direction { get; set; }
-        public int Xpos { get; set; }
-        public int Ypos { get; set; }
+        public int XPos { get; set; }
+        public int YPos { get; set; }
         public string Name { get; set; }
 
-        // Creates a random number for Direction property
         // Skapar en random siffra för Direction prop
         public Person()
         {
             Random rnd = new();
 
-            Xpos = rnd.Next(100);
-            Ypos = rnd.Next(25);
+            XPos = rnd.Next(100);
+            YPos = rnd.Next(25);
 
             Direction = rnd.Next(8);
         }
 
         //Kalla på för att fortsätta flytta person
-        public virtual void Movement(List<Person> persons, string[,] city)
+        public virtual void Movement(List<Person> persons, Person[,] city)
         {
             foreach (Person person in persons)
             {
                 switch (person.Direction)
                 {
                     case 0:     // Neråt 
-                        person.Ypos++;
-                        if (person.Ypos == city.GetLength(0))
+                        person.YPos++;
+                        if (person.YPos == city.GetLength(0))
                         {
-                            person.Ypos = 0;
+                            person.YPos = 0;
                         }
                         break;
                     case 1:     // Vänster ner 
-                        person.Ypos++; //ner
-                        person.Xpos--; //vänster
-                        if (person.Ypos == city.GetLength(0))
+                        person.YPos++; //ner
+                        person.XPos--; //vänster
+                        if (person.YPos == city.GetLength(0))
                         {
-                            person.Ypos = 0;
-                            person.Xpos += 1;
+                            person.YPos = 0;
+                            person.XPos += 1;
                         }
-                        else if (person.Xpos < 0)
+                        else if (person.XPos < 0)
                         {
-                            person.Xpos = city.GetLength(1) - 1;
-                            person.Ypos -= 1;
+                            person.XPos = city.GetLength(1) - 1;
+                            person.YPos -= 1;
 
                         }
                         break;
                     case 2:     // Vänster 
-                        person.Xpos--;
-                        if (person.Xpos < 0)
+                        person.XPos--;
+                        if (person.XPos < 0)
                         {
-                            person.Xpos = city.GetLength(1) - 1;
+                            person.XPos = city.GetLength(1) - 1;
                         }
                         break;
                     case 3:     // Uppåt
-                        person.Ypos--;
-                        if (person.Ypos < 0)
+                        person.YPos--;
+                        if (person.YPos < 0)
                         {
-                            person.Ypos = city.GetLength(0) - 1;
+                            person.YPos = city.GetLength(0) - 1;
                         }
                         break;
                     case 4:     // Höger uppåt
-                        person.Ypos--;
-                        person.Xpos++;
-                        if (person.Ypos < 0)
+                        person.YPos--;
+                        person.XPos++;
+                        if (person.YPos < 0)
                         {
-                            person.Ypos = city.GetLength(0) - 1;
-                            person.Xpos -= 1;
+                            person.YPos = city.GetLength(0) - 1;
+                            person.XPos -= 1;
                         }
-                        else if (person.Xpos == city.GetLength(1))
+                        else if (person.XPos == city.GetLength(1))
                         {
-                            person.Xpos = 0;
-                            person.Ypos += 1;
+                            person.XPos = 0;
+                            person.YPos += 1;
 
                         }
                         break;
                     case 5:     // Höger
-                        person.Xpos++;
-                        if (person.Xpos == city.GetLength(1))
+                        person.XPos++;
+                        if (person.XPos == city.GetLength(1))
                         {
-                            person.Xpos = 0;
+                            person.XPos = 0;
                         }
                         break;
                     case 6: // Höger nedåt
-                        person.Xpos++;
-                        person.Ypos++;
-                        if (person.Xpos == city.GetLength(1))
+                        person.XPos++;
+                        person.YPos++;
+                        if (person.XPos == city.GetLength(1))
                         {
-                            person.Xpos = 0;
-                            person.Ypos -= 1;
+                            person.XPos = 0;
+                            person.YPos -= 1;
                         }
-                        else if (person.Ypos == city.GetLength(0))
+                        else if (person.YPos == city.GetLength(0))
                         {
-                            person.Xpos -= 1;
-                            person.Ypos = 0;
+                            person.XPos -= 1;
+                            person.YPos = 0;
                         }
                         break;
                     case 7: //Vänster uppåt
-                        person.Xpos--;
-                        person.Ypos--;
-                        if (person.Xpos < 0)
+                        person.XPos--;
+                        person.YPos--;
+                        if (person.XPos < 0)
                         {
-                            person.Xpos = city.GetLength(1) - 1;
-                            person.Ypos += 1;
+                            person.XPos = city.GetLength(1) - 1;
+                            person.YPos += 1;
                         }
-                        else if (person.Ypos < 0)
+                        else if (person.YPos < 0)
                         {
-                            person.Xpos += 1;
-                            person.Ypos = city.GetLength(0) - 1;
+                            person.XPos += 1;
+                            person.YPos = city.GetLength(0) - 1;
                         }
                         break;
                 }
@@ -123,48 +122,38 @@ namespace TjuvarOchPoliser
         }
     }
 
-
     internal class Citizen : Person
     {
-        //public List<Thing> Belongings { get; set; }
-        public List<Thing> belongings = new();
+        public List<Thing> Belongings { get; set; }
+        //public List<Thing> belongings = new();
         public Citizen()
         {
-            Phone phone = new Phone();
-            belongings.Add(phone);
+            Belongings = new List<Thing>();
+            Belongings.Add(new Phone());
+            Belongings.Add(new Keys());
+            Belongings.Add(new Watch());
+            Belongings.Add(new Wallet());
 
-            Keys keys = new Keys();
-            belongings.Add(keys);
-
-            Watch watch = new Watch();
-            belongings.Add(watch);
-
-            Wallet wallet = new Wallet();
-            belongings.Add(wallet);
-
-            Name = "M";
+            Name = "C";
         }
     }
 
-
-
     internal class Police : Person
     {
-        public List<string> SeizedGoods { get; set; }
+        public List<Thing> Seized { get; set; }
         public Police()
         {
+            Seized = new List<Thing>();
             Name = "P";
         }
     }
 
-
-
     internal class Thief : Person
     {
-        public List<string> MyProperty { get; set; }
-        public List<string> StolenGoods { get; set; }
+        public List<Thing> Loot { get; set; }
         public Thief()
         {
+            Loot = new List<Thing>();
             Name = "T";
         }
     }
