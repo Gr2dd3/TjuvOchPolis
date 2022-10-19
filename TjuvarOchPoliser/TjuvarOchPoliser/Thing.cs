@@ -8,21 +8,21 @@ namespace TjuvarOchPoliser
 {
     internal class Thing
     {
-        public string Phone { get; set; }
-        public string Keys { get; set; }
-        public string Money { get; set; }
-        public string Watch { get; set; }
-        public Thing(List<string> inventory)
-        {
-            Phone = "Phone";
-            Keys = "Keys";
-            Money = "Money";
-            Watch = "Watch";
-            inventory.Add(Phone);
-            inventory.Add(Keys);
-            inventory.Add(Money);
-            inventory.Add(Watch);
-        }
+    }
+    internal class Phone : Thing
+    {
+        
+    }
+    internal class Watch : Thing
+    {
+
+    }
+    internal class Keys : Thing
+    {
+
+    }
+    internal class Wallet : Thing
+    {
 
     }
 }

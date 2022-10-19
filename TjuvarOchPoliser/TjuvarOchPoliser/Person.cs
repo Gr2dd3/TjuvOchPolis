@@ -70,7 +70,7 @@ namespace TjuvarOchPoliser
                         break;
                     case 4:     // Höger uppåt
                         person.Ypos--;
-                        person.Xpos++; 
+                        person.Xpos++;
                         if (person.Ypos < 0)
                         {
                             person.Ypos = city.GetLength(0) - 1;
@@ -126,11 +126,22 @@ namespace TjuvarOchPoliser
 
     internal class Citizen : Person
     {
-        public List<string> Belongings { get; set; }
+        //public List<Thing> Belongings { get; set; }
+        public List<Thing> belongings = new();
         public Citizen()
         {
-            Belongings = new List<string>();
-            Thing things = new(Belongings);
+            Phone phone = new Phone();
+            belongings.Add(phone);
+
+            Keys keys = new Keys();
+            belongings.Add(keys);
+
+            Watch watch = new Watch();
+            belongings.Add(watch);
+
+            Wallet wallet = new Wallet();
+            belongings.Add(wallet);
+
             Name = "M";
         }
     }
