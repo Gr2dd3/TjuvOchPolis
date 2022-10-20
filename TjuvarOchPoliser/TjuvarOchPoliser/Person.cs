@@ -150,7 +150,7 @@ namespace TjuvarOchPoliser
             Name = "P";
         }
 
-        public string Seize(Person person, Person[,] Matrix, int rows, int cols, string action)
+        public string Seize(Person person, Person[,] Matrix, int rows, int cols, string action, Prison prison, List<Person> persons)
         {
             
             Person personZ = new();
@@ -160,14 +160,18 @@ namespace TjuvarOchPoliser
 
                 if (((Thief)Matrix[rows, cols]).Loot.Count > 0)
                 {
+                    int items = ((Thief)Matrix[rows, cols]).Loot.Count;
+                    ((Thief)Matrix[rows, cols]).PrisonCount = items * 15;
 
                     ((Police)person).Seized.AddRange(((Thief)Matrix[rows, cols]).Loot);
                     ((Thief)Matrix[rows, cols]).Loot.Clear();
-                    Matrix[rows, cols] = personZ;
                     action = "Polis arresterar tjuv";
-                  
+
                     //((Thief)Matrix[rows, cols]).HasLoot = false;
                     // GoToJail();
+                    prison.Prisoners.Add((Thief)Matrix[rows, cols]);
+                    persons.Remove((Thief)Matrix[rows, cols]);
+                    Matrix[rows, cols] = personZ;
                 }
             }
             // Thief möter Police
@@ -177,12 +181,17 @@ namespace TjuvarOchPoliser
                 //Seize();
                 if (((Thief)person).Loot.Count > 0)
                 {
+                    int items = ((Thief)person).Loot.Count;
+                    ((Thief)person).PrisonCount = items * 15;
+
                     ((Police)Matrix[rows, cols]).Seized.AddRange(((Thief)person).Loot);
                     ((Thief)person).Loot.Clear();
                     Matrix[rows, cols] = personZ;
                     action = "Polis arresterar tjuv";
-                    
+
                     // GoToJail();
+                    prison.Prisoners.Add((Thief)person);
+                    persons.Remove((Thief)person);
                 }
             }
             return action;
@@ -193,6 +202,8 @@ namespace TjuvarOchPoliser
     {
         public List<Thing> Loot { get; set; }
         public bool HasLoot { get; set; }
+        public int PrisonCount { get; set; }
+
         public Thief()
         {
             Loot = new List<Thing>();

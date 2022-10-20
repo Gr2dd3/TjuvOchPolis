@@ -21,7 +21,6 @@ namespace TjuvarOchPoliser
         public City()
         {
             Matrix = new Person[25, 100];
-
         }
 
         public void CityRun()
@@ -29,12 +28,14 @@ namespace TjuvarOchPoliser
             List<Person> persons = new();
             Person p = new Person();
 
-            for (int i = 0; i < 10; i++)
+            Prison prison = new();
+
+            for (int i = 0; i < 20; i++)
             {
                 Police police = new();
                 persons.Add(police);
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Citizen citizen = new();
                 persons.Add(citizen);
@@ -47,10 +48,7 @@ namespace TjuvarOchPoliser
 
             while (true)
             {
-
-
                 p.Movement(persons, Matrix);
-
 
                 Console.WriteLine("┌" + "".PadRight(100, '─') + "┐");
 
@@ -67,7 +65,7 @@ namespace TjuvarOchPoliser
 
                                 if (Matrix[rows, cols] != null)
                                 {
-                                    Collide(person, rows, cols, Matrix);
+                                    Collide(person, rows, cols, Matrix, prison, persons);
                                 }
                                 else
                                 {
@@ -114,7 +112,7 @@ namespace TjuvarOchPoliser
         }
 
 
-        public void Collide(Person person, int rows, int cols, Person[,] Matrix)
+        public void Collide(Person person, int rows, int cols, Person[,] Matrix, Prison prison, List<Person> persons)
         {
 
             // Rån
@@ -133,7 +131,7 @@ namespace TjuvarOchPoliser
             if (person is Police && Matrix[rows, cols] is Thief || person is Thief && Matrix[rows, cols] is Police)
             {
                 Police police = new();
-                action = police.Seize(person, Matrix, rows, cols, action);
+                action = police.Seize(person, Matrix, rows, cols, action, prison, persons);
                 if (action != "")
                 {
                     SeizedCounter++;
@@ -168,49 +166,5 @@ namespace TjuvarOchPoliser
                 counter++;
             }
         }
-    }
-
-
-
-    internal class Prison
-    {
-        public List<Person> Prisoners { get; set; }
-        public int PrisonCounter { get; set; }
-        public Person[,] Matrix { get; set; }
-
-        public Prison()
-        {
-            Matrix = new Person [10, 10];
-        }
-
-
-        public void DrawPrison(Prison prison)
-        {
-            
-
-            for (int rows = 0; rows < Matrix.GetLength(0); rows++)
-            {
-                for (int cols = 0; cols < Matrix.GetLength(1); cols++)
-                {
-                    Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols]);
-                }
-                Console.WriteLine();
-            }
-        }
-
-
-
-        //public void RunPrison(Person person, City city)
-        //{
-        //    for (int i = 0; i < Prisoners.Count; i++)
-        //    {
-        //        if (((Thief)person).Loot.Count == 4)
-        //        {
-        //            PrisonCounter = 40;
-
-        //            PrisonCounter--;
-        //        }
-        //    }
-        //}
     }
 }
