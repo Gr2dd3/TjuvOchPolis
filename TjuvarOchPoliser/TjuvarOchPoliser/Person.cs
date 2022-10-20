@@ -22,6 +22,8 @@ namespace TjuvarOchPoliser
             YPos = rnd.Next(25);
 
             Direction = rnd.Next(8);
+
+            Name = "█";
         }
 
         //Kalla på för att fortsätta flytta person

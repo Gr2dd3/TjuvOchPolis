@@ -43,11 +43,14 @@ namespace TjuvarOchPoliser
                 // ActionList(persons);
 
                 p.Movement(persons, Matrix);
+                Person personX = new();
                 string action = "";
+                Console.WriteLine("┌" + "".PadRight(100, '─') + "┐");
 
                 // Placerar personerna i Matrix
                 for (int rows = 0; rows < Matrix.GetLength(0); rows++)
                 {
+                    Console.Write("│");
                     for (int cols = 0; cols < Matrix.GetLength(1); cols++)
                     {
                         foreach (var person in persons)
@@ -60,7 +63,6 @@ namespace TjuvarOchPoliser
                                     // Police möter Thief
                                     if (person is Police && Matrix[rows, cols] is Thief)
                                     {
-                                        Console.Write("[X]");
                                         // Seize();
                                         if (((Thief)Matrix[rows, cols]).Loot.Count == 0)
                                         {
@@ -68,6 +70,7 @@ namespace TjuvarOchPoliser
                                         }
                                         ((Police)person).Seized.AddRange(((Thief)Matrix[rows, cols]).Loot);
                                         ((Thief)Matrix[rows, cols]).Loot.Clear();
+                                        Matrix[rows, cols] = personX;
                                         action = "Polis arresterar tjuv";
                                         SeizedCounter++;
                                         // GoToJail();
@@ -75,7 +78,7 @@ namespace TjuvarOchPoliser
                                     // Thief möter Police
                                     if (person is Thief && Matrix[rows, cols] is Police)
                                     {
-                                        Console.Write("[X]");
+
                                         //Seize();
                                         if (((Thief)person).Loot.Count == 0)
                                         {
@@ -83,6 +86,7 @@ namespace TjuvarOchPoliser
                                         }
                                         ((Police)Matrix[rows, cols]).Seized.AddRange(((Thief)person).Loot);
                                         ((Thief)person).Loot.Clear();
+                                        Matrix[rows, cols] = personX;
                                         action = "Polis arresterar tjuv";
                                         SeizedCounter++;
                                         // GoToJail();
@@ -90,7 +94,7 @@ namespace TjuvarOchPoliser
                                     // Citizen möter Thief
                                     if (person is Citizen && Matrix[rows, cols] is Thief)
                                     {
-                                        Console.Write("[X]");
+
                                         //Rob();
                                         if (((Citizen)person).Belongings.Count == 0)
                                         {
@@ -100,13 +104,14 @@ namespace TjuvarOchPoliser
                                         int removeAtIndex = random.Next(((Citizen)person).Belongings.Count - 1);
                                         ((Thief)Matrix[rows, cols]).Loot.Add(((Citizen)person).Belongings[removeAtIndex]);
                                         ((Citizen)person).Belongings.RemoveAt(removeAtIndex);
+                                        Matrix[rows, cols] = personX;
                                         action = "Tjuv rånar medborgare";
                                         RobbedCounter++;
                                     }
                                     // Thief möter Citizen
                                     if (person is Thief && Matrix[rows, cols] is Citizen)
                                     {
-                                        Console.Write("[X]");
+
                                         //Rob();
                                         if (((Citizen)Matrix[rows, cols]).Belongings.Count == 0)
                                         {
@@ -116,6 +121,7 @@ namespace TjuvarOchPoliser
                                         int removeAtIndex = random.Next(((Citizen)Matrix[rows, cols]).Belongings.Count - 1);
                                         ((Thief)person).Loot.Add(((Citizen)Matrix[rows, cols]).Belongings[removeAtIndex]);
                                         ((Citizen)Matrix[rows, cols]).Belongings.RemoveAt(removeAtIndex);
+                                        Matrix[rows, cols] = personX;
                                         action = "Tjuv rånar medborgare";
                                         RobbedCounter++;
                                     }
@@ -136,16 +142,26 @@ namespace TjuvarOchPoliser
                         Console.ForegroundColor = ConsoleColor.White;
                         Matrix[rows, cols] = null;       // Raderar "spåret" på fult sätt
                     }
+                    Console.Write("│");
+
                     Console.WriteLine();
                 }
-                Thread.Sleep(200);
-                Console.SetCursorPosition(35, 30);
+                Console.WriteLine("└" + "".PadRight(100, '─') + "┘");
 
+                Console.SetCursorPosition(45, 33);
+                Console.WriteLine("Antal tjuvar arresterade: " + SeizedCounter);
+                Console.SetCursorPosition(45, 34);
+                Console.WriteLine("Antal rånade: " + RobbedCounter);
                 if (action != "")
                 {
+                    Console.SetCursorPosition(45, 30);
                     Console.WriteLine(action);
+                    Console.SetCursorPosition(45, 31);
+                    Console.WriteLine("-------------------");
+
                     Thread.Sleep(2000);
                 }
+                Thread.Sleep(200);
                 Console.Clear();
             }
         }

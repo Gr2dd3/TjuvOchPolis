@@ -12,6 +12,16 @@ internal class Program
         city.CityRun();
     }
 }
+
+
+
+
+
+
+
+
+
+
 //while (true)
 //{
 //    for (int rows = 0; rows < city.Matrix.GetLength(0); rows++)
