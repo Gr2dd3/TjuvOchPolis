@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TjuvarOchPoliser
 {
@@ -12,9 +16,12 @@ namespace TjuvarOchPoliser
         public int SeizedCounter { get; set; }
         public Person[,] Matrix { get; set; }
 
+        public string action = "";
+
         public City()
         {
             Matrix = new Person[25, 100];
+
         }
 
         public void CityRun()
@@ -40,11 +47,11 @@ namespace TjuvarOchPoliser
 
             while (true)
             {
-                // ActionList(persons);
+
 
                 p.Movement(persons, Matrix);
-                Person personX = new();
-                string action = "";
+
+
                 Console.WriteLine("┌" + "".PadRight(100, '─') + "┐");
 
                 // Placerar personerna i Matrix
@@ -60,71 +67,7 @@ namespace TjuvarOchPoliser
 
                                 if (Matrix[rows, cols] != null)
                                 {
-                                    // Police möter Thief
-                                    if (person is Police && Matrix[rows, cols] is Thief)
-                                    {
-                                        // Seize();
-                                        if (((Thief)Matrix[rows, cols]).Loot.Count == 0)
-                                        {
-                                            break;
-                                        }
-                                        ((Police)person).Seized.AddRange(((Thief)Matrix[rows, cols]).Loot);
-                                        ((Thief)Matrix[rows, cols]).Loot.Clear();
-                                        Matrix[rows, cols] = personX;
-                                        action = "Polis arresterar tjuv";
-                                        SeizedCounter++;
-                                        // GoToJail();
-                                    }
-                                    // Thief möter Police
-                                    if (person is Thief && Matrix[rows, cols] is Police)
-                                    {
-
-                                        //Seize();
-                                        if (((Thief)person).Loot.Count == 0)
-                                        {
-                                            break;
-                                        }
-                                        ((Police)Matrix[rows, cols]).Seized.AddRange(((Thief)person).Loot);
-                                        ((Thief)person).Loot.Clear();
-                                        Matrix[rows, cols] = personX;
-                                        action = "Polis arresterar tjuv";
-                                        SeizedCounter++;
-                                        // GoToJail();
-                                    }
-                                    // Citizen möter Thief
-                                    if (person is Citizen && Matrix[rows, cols] is Thief)
-                                    {
-
-                                        //Rob();
-                                        if (((Citizen)person).Belongings.Count == 0)
-                                        {
-                                            break;
-                                        }
-                                        Random random = new();
-                                        int removeAtIndex = random.Next(((Citizen)person).Belongings.Count - 1);
-                                        ((Thief)Matrix[rows, cols]).Loot.Add(((Citizen)person).Belongings[removeAtIndex]);
-                                        ((Citizen)person).Belongings.RemoveAt(removeAtIndex);
-                                        Matrix[rows, cols] = personX;
-                                        action = "Tjuv rånar medborgare";
-                                        RobbedCounter++;
-                                    }
-                                    // Thief möter Citizen
-                                    if (person is Thief && Matrix[rows, cols] is Citizen)
-                                    {
-
-                                        //Rob();
-                                        if (((Citizen)Matrix[rows, cols]).Belongings.Count == 0)
-                                        {
-                                            break;
-                                        }
-                                        Random random = new();
-                                        int removeAtIndex = random.Next(((Citizen)Matrix[rows, cols]).Belongings.Count - 1);
-                                        ((Thief)person).Loot.Add(((Citizen)Matrix[rows, cols]).Belongings[removeAtIndex]);
-                                        ((Citizen)Matrix[rows, cols]).Belongings.RemoveAt(removeAtIndex);
-                                        Matrix[rows, cols] = personX;
-                                        action = "Tjuv rånar medborgare";
-                                        RobbedCounter++;
-                                    }
+                                    Collide(person, rows, cols, Matrix);
                                 }
                                 else
                                 {
@@ -159,10 +102,44 @@ namespace TjuvarOchPoliser
                     Console.SetCursorPosition(45, 31);
                     Console.WriteLine("-------------------");
 
-                    Thread.Sleep(2000);
+                    // Thread.Sleep(2000);
+                    action = "";
                 }
+
                 Thread.Sleep(200);
+                // ActionList(persons);
+                Console.ReadKey();
                 Console.Clear();
+            }
+        }
+
+
+        public void Collide(Person person, int rows, int cols, Person[,] Matrix)
+        {
+
+            // Rån
+            if (person is Thief && Matrix[rows, cols] is Citizen || person is Citizen && Matrix[rows, cols] is Thief)
+            {
+                Thief thief = new();
+                action = thief.Rob(person, Matrix, rows, cols, action);
+                if (action != "")
+                {
+                    RobbedCounter++;
+                }
+                
+
+            }
+            // Beslagta
+            if (person is Police && Matrix[rows, cols] is Thief || person is Thief && Matrix[rows, cols] is Police)
+            {
+                Police police = new();
+                action = police.Seize(person, Matrix, rows, cols, action);
+                if (action != "")
+                {
+                    SeizedCounter++;
+                }
+
+
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TjuvarOchPoliser
 {
@@ -23,7 +24,7 @@ namespace TjuvarOchPoliser
 
             Direction = rnd.Next(8);
 
-            Name = "█";
+            Name = "X";
         }
 
         //Kalla på för att fortsätta flytta person
@@ -148,15 +149,100 @@ namespace TjuvarOchPoliser
             Seized = new List<Thing>();
             Name = "P";
         }
+
+        public string Seize(Person person, Person[,] Matrix, int rows, int cols, string action)
+        {
+            
+            Person personZ = new();
+            // Police möter Thief
+            if (person is Police)
+            {
+
+                if (((Thief)Matrix[rows, cols]).Loot.Count > 0)
+                {
+
+                    ((Police)person).Seized.AddRange(((Thief)Matrix[rows, cols]).Loot);
+                    ((Thief)Matrix[rows, cols]).Loot.Clear();
+                    Matrix[rows, cols] = personZ;
+                    action = "Polis arresterar tjuv";
+                  
+                    //((Thief)Matrix[rows, cols]).HasLoot = false;
+                    // GoToJail();
+                }
+            }
+            // Thief möter Police
+            if (person is Thief)
+            {
+
+                //Seize();
+                if (((Thief)person).Loot.Count > 0)
+                {
+                    ((Police)Matrix[rows, cols]).Seized.AddRange(((Thief)person).Loot);
+                    ((Thief)person).Loot.Clear();
+                    Matrix[rows, cols] = personZ;
+                    action = "Polis arresterar tjuv";
+                    
+                    // GoToJail();
+                }
+            }
+            return action;
+        }
     }
 
     internal class Thief : Person
     {
         public List<Thing> Loot { get; set; }
+        public bool HasLoot { get; set; }
         public Thief()
         {
             Loot = new List<Thing>();
             Name = "T";
+            HasLoot = false;
+        }
+
+        public string Rob(Person person, Person[,] Matrix, int rows, int cols, string action)
+        {
+            Random random = new();
+            Person personX = new();
+            
+
+            // Citizen möter Thief
+            if (person is Citizen)
+            {
+
+                //Rob();
+                if (((Citizen)person).Belongings.Count > 0)
+                {
+                    int removeAtIndex = random.Next(((Citizen)person).Belongings.Count - 1);
+                    ((Thief)Matrix[rows, cols]).Loot.Add(((Citizen)person).Belongings[removeAtIndex]);
+                    ((Citizen)person).Belongings.RemoveAt(removeAtIndex);
+                    Matrix[rows, cols] = personX;
+                    HasLoot = true;
+                    action = "Tjuv rånar medborgare";
+                    
+
+                }
+
+            }
+            // Thief möter Citizen
+            if (person is Thief)
+            {
+
+                //Rob();
+                if (((Citizen)Matrix[rows, cols]).Belongings.Count > 0)
+                {
+                    int removeAtIndex = random.Next(((Citizen)Matrix[rows, cols]).Belongings.Count - 1);
+                    ((Thief)person).Loot.Add(((Citizen)Matrix[rows, cols]).Belongings[removeAtIndex]);
+                    ((Citizen)Matrix[rows, cols]).Belongings.RemoveAt(removeAtIndex);
+                    Matrix[rows, cols] = personX;
+                    HasLoot = true;
+                    action = "Tjuv rånar medborgare";
+                    
+                }
+
+            }
+            return action;
+
         }
     }
 }
