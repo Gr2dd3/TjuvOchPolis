@@ -58,18 +58,18 @@ namespace TjuvarOchPoliser
                     Console.Write("│");
                     for (int cols = 0; cols < Matrix.GetLength(1); cols++)
                     {
-                        foreach (var person in persons)
+                        for(int index = 0; index < persons.Count; index++)
                         {
-                            if (person.XPos == cols && person.YPos == rows)
+                            if (persons[index].XPos == cols && persons[index].YPos == rows)
                             {
 
                                 if (Matrix[rows, cols] != null)
                                 {
-                                    Collide(person, rows, cols, Matrix, prison, persons);
+                                    Collide(rows, cols, Matrix, prison, persons, index);
                                 }
                                 else
                                 {
-                                    Matrix[rows, cols] = person;
+                                    Matrix[rows, cols] = persons[index];
                                 }
                             }
                         }
@@ -106,38 +106,35 @@ namespace TjuvarOchPoliser
 
                 Thread.Sleep(200);
                 // ActionList(persons);
+                prison.DrawPrison();
                 Console.ReadKey();
                 Console.Clear();
             }
         }
 
 
-        public void Collide(Person person, int rows, int cols, Person[,] Matrix, Prison prison, List<Person> persons)
+        public void Collide(int rows, int cols, Person[,] Matrix, Prison prison, List<Person> persons, int index)
         {
 
             // Rån
-            if (person is Thief && Matrix[rows, cols] is Citizen || person is Citizen && Matrix[rows, cols] is Thief)
+            if (persons[index] is Thief && Matrix[rows, cols] is Citizen || persons[index] is Citizen && Matrix[rows, cols] is Thief)
             {
                 Thief thief = new();
-                action = thief.Rob(person, Matrix, rows, cols, action);
+                action = thief.Rob(Matrix, rows, cols, action, persons, index);
                 if (action != "")
                 {
                     RobbedCounter++;
                 }
-
-
             }
             // Beslagta
-            if (person is Police && Matrix[rows, cols] is Thief || person is Thief && Matrix[rows, cols] is Police)
+            if (persons[index] is Police && Matrix[rows, cols] is Thief || persons[index] is Thief && Matrix[rows, cols] is Police)
             {
                 Police police = new();
-                action = police.Seize(person, Matrix, rows, cols, action, prison, persons);
+                action = police.Seize(Matrix, rows, cols, action, prison, persons, index);
                 if (action != "")
                 {
                     SeizedCounter++;
                 }
-
-
             }
         }
 

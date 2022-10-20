@@ -19,18 +19,25 @@ namespace TjuvarOchPoliser
         }
 
 
-        public void DrawPrison(Prison prison)
+        public void DrawPrison()
         {
+            foreach(var prisoner in Prisoners)
+            {
+                Matrix[prisoner.XPos,prisoner.YPos] = prisoner;
+            }
 
-
+            Console.WriteLine("┌" + "".PadRight(10, '─') + "┐");
             for (int rows = 0; rows < Matrix.GetLength(0); rows++)
             {
+                Console.Write("│");
                 for (int cols = 0; cols < Matrix.GetLength(1); cols++)
                 {
-                    Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols]);
+                    Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols].Name);
                 }
+                Console.Write("│");
                 Console.WriteLine();
             }
+            Console.WriteLine("└" + "".PadRight(10, '─') + "┘");
         }
 
 
