@@ -205,14 +205,14 @@ namespace TjuvarOchPoliser
     internal class Thief : Person
     {
         public List<Thing> Loot { get; set; }
-        public bool HasLoot { get; set; }
+        // public bool HasLoot { get; set; }
         public int PrisonCount { get; set; }
 
         public Thief()
         {
             Loot = new List<Thing>();
             Name = "T";
-            HasLoot = false;
+            // HasLoot = false;
         }
 
         public string Rob(Person[,] Matrix, int rows, int cols, string action, List<Person> persons, int index)
@@ -232,7 +232,7 @@ namespace TjuvarOchPoliser
                     ((Thief)Matrix[rows, cols]).Loot.Add(((Citizen)persons[index]).Belongings[removeAtIndex]);
                     ((Citizen)persons[index]).Belongings.RemoveAt(removeAtIndex);
                     Matrix[rows, cols] = personX;
-                    HasLoot = true;
+                    //HasLoot = true;
                     action = "Tjuv rånar medborgare";
                 }
 
@@ -248,7 +248,7 @@ namespace TjuvarOchPoliser
                     ((Thief)persons[index]).Loot.Add(((Citizen)Matrix[rows, cols]).Belongings[removeAtIndex]);
                     ((Citizen)Matrix[rows, cols]).Belongings.RemoveAt(removeAtIndex);
                     Matrix[rows, cols] = personX;
-                    HasLoot = true;
+                    // HasLoot = true;
                     action = "Tjuv rånar medborgare";
                     
                 }

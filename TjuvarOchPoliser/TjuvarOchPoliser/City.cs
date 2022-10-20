@@ -100,14 +100,13 @@ namespace TjuvarOchPoliser
                     Console.SetCursorPosition(45, 31);
                     Console.WriteLine("-------------------");
 
-                    // Thread.Sleep(2000);
+                    Thread.Sleep(2000);
                     action = "";
                 }
-
-                Thread.Sleep(200);
-                // ActionList(persons);
                 prison.DrawPrison();
-                Console.ReadKey();
+                Thread.Sleep(250);
+                // ActionList(persons);
+                //Console.ReadKey();
                 Console.Clear();
             }
         }
