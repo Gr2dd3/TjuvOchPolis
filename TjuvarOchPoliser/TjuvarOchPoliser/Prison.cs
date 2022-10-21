@@ -19,42 +19,42 @@ namespace TjuvarOchPoliser
         }
 
 
-        public void DrawPrison()
+        public void Draw(List<Person> persons)
         {
+            Matrix = new Person[10, 20];
+            Person p = new();
+
+            p.Move(Prisoners, Matrix);
+            
             foreach(var prisoner in Prisoners)
             {
-                Matrix[prisoner.XPos,prisoner.YPos] = prisoner;
+                Matrix[prisoner.YPos,prisoner.XPos] = prisoner;
             }
 
-            Console.WriteLine("┌" + "".PadRight(10, '─') + "┐");
+            Console.WriteLine("┌" + "".PadRight(Matrix.GetLength(1), '─') + "┐");
             for (int rows = 0; rows < Matrix.GetLength(0); rows++)
             {
                 Console.Write("│");
                 for (int cols = 0; cols < Matrix.GetLength(1); cols++)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols].Name);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.Write("│");
                 Console.WriteLine();
             }
-            Console.WriteLine("└" + "".PadRight(10, '─') + "┘");
+            Console.WriteLine("└" + "".PadRight(Matrix.GetLength(1), '─') + "┘");
+
+            for (int i = 0; i < Prisoners.Count; i++)
+            {
+                ((Thief)Prisoners[i]).PrisonCount--;
+                if (((Thief)Prisoners[i]).PrisonCount == 0)
+                {
+                    persons.Add((Thief)Prisoners[i]);
+                    Prisoners.Remove((Thief)Prisoners[i]);
+                }
+            };
         }
-
-
-
-
-
-        //public void RunPrison(Person person, City city)
-        //{
-        //    for (int i = 0; i < Prisoners.Count; i++)
-        //    {
-        //        if (((Thief)person).Loot.Count == 4)
-        //        {
-        //            PrisonCounter = 40;
-
-        //            PrisonCounter--;
-        //        }
-        //    }
-        //}
     }
 }
