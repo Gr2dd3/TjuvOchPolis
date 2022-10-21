@@ -25,10 +25,16 @@ namespace TjuvarOchPoliser
             Person p = new();
 
             p.Move(Prisoners, Matrix);
-            
-            foreach(var prisoner in Prisoners)
+
+            foreach (var prisoner in Prisoners)
             {
-                Matrix[prisoner.YPos,prisoner.XPos] = prisoner;
+                Random r = new Random();
+                while (Matrix[prisoner.YPos, prisoner.XPos] != null)
+                {
+                    prisoner.XPos = r.Next(Matrix.GetLength(1));
+                    prisoner.YPos = r.Next(Matrix.GetLength(0));
+                }
+                Matrix[prisoner.YPos, prisoner.XPos] = prisoner;
             }
 
             Console.WriteLine("┌" + "".PadRight(Matrix.GetLength(1), '─') + "┐");

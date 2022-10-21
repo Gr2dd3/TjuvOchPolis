@@ -9,7 +9,7 @@ namespace TjuvarOchPoliser
     internal class Citizen : Person
     {
         public List<Thing> Belongings { get; set; }
-        //public List<Thing> belongings = new();
+        
         public Citizen()
         {
             Belongings = new List<Thing>();

@@ -30,7 +30,7 @@ namespace TjuvarOchPoliser
             Person p = new Person();
             Prison prison = new();
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Police police = new();
                 persons.Add(police);
@@ -40,7 +40,7 @@ namespace TjuvarOchPoliser
                 Citizen citizen = new();
                 persons.Add(citizen);
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Thief thief = new();
                 persons.Add(thief);
@@ -51,19 +51,16 @@ namespace TjuvarOchPoliser
             {
                 //ActionList(persons);
 
+               
                 Matrix = new Person[25, 100];
-
+                
                 PutPeopleInCity(persons, prison);
                 DrawMatrix();
                 p.Move(persons, Matrix);
-
                 prison.Draw(persons);
-
                 DrawAction(prison);
-
                 Thread.Sleep(200);
-                //Console.ReadKey();
-                Console.Clear();
+                //Console.ReadKey();                
             }
         }
 
@@ -104,6 +101,7 @@ namespace TjuvarOchPoliser
 
         private void DrawMatrix()
         {
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine("┌" + "".PadRight(Matrix.GetLength(1), '─') + "┐");
             for (int rows = 0; rows < Matrix.GetLength(0); rows++)
             {
@@ -130,7 +128,7 @@ namespace TjuvarOchPoliser
             Console.CursorVisible = false;
 
             Console.SetCursorPosition(45, 33);
-            Console.WriteLine("Number of inmates: " + prison.Prisoners.Count);
+            Console.WriteLine("Number of inmates: " + prison.Prisoners.Count + "   ");
             Console.SetCursorPosition(45, 34);
             Console.WriteLine("Number of robberies: " + RobbedCounter);
             if (action != null)
@@ -141,6 +139,13 @@ namespace TjuvarOchPoliser
 
                 Thread.Sleep(2000);
                 action = null;
+            }
+            else
+            {
+                Console.SetCursorPosition(45, 30);
+                Console.WriteLine("".PadRight(45, ' '));
+                Console.SetCursorPosition(45, 31);
+
             }
         }
 
