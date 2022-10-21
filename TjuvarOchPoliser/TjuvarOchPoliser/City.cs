@@ -29,18 +29,20 @@ namespace TjuvarOchPoliser
             List<Person> persons = new();
             Person p = new Person();
             Prison prison = new();
+            Batman batman = new();
 
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 10; i++)
             {
-                Police police = new();
-                persons.Add(police);
+                Batman batman1 = new();
+                //Police police = new();
+                persons.Add(batman1);
             }
             for (int i = 0; i < 30; i++)
             {
                 Citizen citizen = new();
                 persons.Add(citizen);
             }
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Thief thief = new();
                 persons.Add(thief);
@@ -50,17 +52,20 @@ namespace TjuvarOchPoliser
             while (true)
             {
                 //ActionList(persons);
-
-               
                 Matrix = new Person[25, 100];
-                
+
                 PutPeopleInCity(persons, prison);
+
                 DrawMatrix();
-                p.Move(persons, Matrix);
                 prison.Draw(persons);
+
+                p.Move(persons, Matrix);
+
                 DrawAction(prison);
+                persons = batman.BatDeployTimer(persons, batman);
                 Thread.Sleep(200);
-                //Console.ReadKey();                
+                // Console.ReadKey();
+
             }
         }
 
@@ -75,6 +80,7 @@ namespace TjuvarOchPoliser
         private Person Collide(int rows, int cols, Person person, List<Person> persons, Prison prison)
         {
             Person personX = new();
+
 
             // Rån
             if (person is Thief && Matrix[rows, cols] is Citizen || person is Citizen && Matrix[rows, cols] is Thief)
@@ -96,6 +102,13 @@ namespace TjuvarOchPoliser
                 }
                 action = police.Seize(person, Matrix, rows, cols, action, persons, prison);
             }
+            // Batman
+            if (person is Batman && Matrix[rows, cols] is Thief || person is Thief && Matrix[rows, cols] is Batman)
+            {
+                Batman batman = new();
+
+                action = batman.KaPow(person, Matrix, rows, cols, action, persons);
+            }
             return personX;
         }
 
@@ -110,10 +123,13 @@ namespace TjuvarOchPoliser
                 {
                     if (Matrix[rows, cols] is Police)
                         Console.ForegroundColor = ConsoleColor.Blue;
-                    if (Matrix[rows, cols] is Thief)
+                    else if (Matrix[rows, cols] is Thief)
                         Console.ForegroundColor = ConsoleColor.Red;
-                    if (Matrix[rows, cols] is Citizen)
+                    else if (Matrix[rows, cols] is Citizen)
                         Console.ForegroundColor = ConsoleColor.Green;
+                    else if (Matrix[rows, cols] is Batman)
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+
                     Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols].Name);
                     Console.ResetColor();
                 }
@@ -127,24 +143,24 @@ namespace TjuvarOchPoliser
         {
             Console.CursorVisible = false;
 
-            Console.SetCursorPosition(45, 33);
-            Console.WriteLine("Number of inmates: " + prison.Prisoners.Count + "   ");
-            Console.SetCursorPosition(45, 34);
-            Console.WriteLine("Number of robberies: " + RobbedCounter);
+            Console.SetCursorPosition(25, 30);
+            Console.WriteLine("Number of inmates: " + prison.Prisoners.Count + "       ");
+            Console.SetCursorPosition(25, 31);
+            Console.WriteLine("Number of robberies: " + RobbedCounter + "    ");
             if (action != null)
             {
-                Console.SetCursorPosition(45, 30);
-                Console.WriteLine(action);
-                Console.SetCursorPosition(45, 31);
+                Console.SetCursorPosition(25, 28);
+                Console.WriteLine(action + "               ");
 
-                Thread.Sleep(2000);
+
+                Thread.Sleep(2500);
                 action = null;
             }
             else
             {
-                Console.SetCursorPosition(45, 30);
-                Console.WriteLine("".PadRight(45, ' '));
-                Console.SetCursorPosition(45, 31);
+                Console.SetCursorPosition(25, 28);
+                Console.WriteLine("".PadRight(90, ' '));
+
 
             }
         }

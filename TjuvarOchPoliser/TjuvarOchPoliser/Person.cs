@@ -32,6 +32,10 @@ namespace TjuvarOchPoliser
         {
             foreach (var person in listOfPeople)
             {
+                if (person is Batman)
+                {
+
+                }
                 person.YPos += person.Direction[0];
                 person.XPos += person.Direction[1];
 
@@ -51,6 +55,7 @@ namespace TjuvarOchPoliser
                 {
                     person.XPos = matrix.GetLength(1) - 1;
                 }
+
             }
         }
     }
