@@ -9,42 +9,24 @@ namespace TjuvarOchPoliser
     internal class Thief : Person
     {
         public List<Thing> Loot { get; set; }
-        public int PrisonCount { get; set; }
+        public int Sentenced { get; set; }
+        public bool IsArrested { get; set; }
 
-        public Thief()
+        public Thief(Random random) : base(random)
         {
             Loot = new List<Thing>();
+            IsArrested = false;
+            Color = ConsoleColor.Red;
             Name = "T";
         }
 
-        public string Rob(Person person, Person[,] matrix, int rows, int cols, string action)
+        public void Rob(Citizen citizen)
         {
             Random random = new();
+            int removeAtIndex = random.Next(citizen.Belongings.Count - 1);
 
-            // Citizen möter Thief
-            if (person is Citizen)
-            {
-                if (((Citizen)matrix[rows, cols]).Belongings.Count > 0)
-                {
-                    int removeAtIndex = random.Next(((Citizen)person).Belongings.Count - 1);
-                    ((Thief)matrix[rows, cols]).Loot.Add(((Citizen)person).Belongings[removeAtIndex]);
-                    ((Citizen)person).Belongings.RemoveAt(removeAtIndex);
-                    action = "Citizen gets robbed by thief";
-                }
-            }
-
-            // Thief möter Citizen
-            if (person is Thief)
-            {
-                if (((Citizen)matrix[rows, cols]).Belongings.Count > 0)
-                {
-                    int removeAtIndex = random.Next(((Citizen)matrix[rows, cols]).Belongings.Count - 1);
-                    ((Thief)person).Loot.Add(((Citizen)matrix[rows, cols]).Belongings[removeAtIndex]);
-                    ((Citizen)matrix[rows, cols]).Belongings.RemoveAt(removeAtIndex);
-                    action = "Citizen gets robbed by thief";
-                }
-            }
-            return action;
+            Loot.Add(citizen.Belongings[removeAtIndex]);
+            citizen.Belongings.RemoveAt(removeAtIndex);
         }
     }
 }

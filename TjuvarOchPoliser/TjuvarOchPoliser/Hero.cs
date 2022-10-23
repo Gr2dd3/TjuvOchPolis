@@ -9,5 +9,9 @@ namespace TjuvarOchPoliser
     internal class Hero : Person
     {
         public int Counter { get; set; }
+        public Hero(Random random) : base(random)
+        {
+
+        }
     }
 }

@@ -8,59 +8,58 @@ namespace TjuvarOchPoliser
 {
     internal class Prison
     {
-        public List<Person> Prisoners { get; set; }
+        public List<Thief> Prisoners { get; set; }
         public int PrisonCounter { get; set; }
         public Person[,] Matrix { get; set; }
 
         public Prison()
         {
-            Matrix = new Person[10, 10];
-            Prisoners = new List<Person>();
+            Matrix = new Person[10, 20];
+            Prisoners = new List<Thief>();
         }
 
-
-        public void Draw(List<Person> persons)
+        public void PutThievesInPrison(List<Person> people, List<Thief> thieves)
         {
-            Matrix = new Person[10, 20];
-            Person p = new();
+            Random random = new();
+            foreach (var thief in thieves)
+            {
+                thief.IsArrested = false;
+                thief.XPos = random.Next(Matrix.GetLength(1));
+                thief.YPos = random.Next(Matrix.GetLength(0));
 
-            p.Move(Prisoners, Matrix);
+                Prisoners.Add(thief);
+                people.Remove(thief);
+            }
+        }
 
+        internal void UpdatePrisonMatrix()
+        {
+            Random random = new();
             foreach (var prisoner in Prisoners)
             {
-                Random r = new Random();
-                while (Matrix[prisoner.YPos, prisoner.XPos] != null)
+                while (Matrix[prisoner.YPos, prisoner.XPos] is not null)
                 {
-                    prisoner.XPos = r.Next(Matrix.GetLength(1));
-                    prisoner.YPos = r.Next(Matrix.GetLength(0));
+                    Matrix[prisoner.YPos, prisoner.XPos].XPos = random.Next(Matrix.GetLength(1));
+                    Matrix[prisoner.YPos, prisoner.XPos].YPos = random.Next(Matrix.GetLength(0));
                 }
                 Matrix[prisoner.YPos, prisoner.XPos] = prisoner;
             }
+        }
 
-            Console.WriteLine("┌" + "".PadRight(Matrix.GetLength(1), '─') + "┐");
-            for (int rows = 0; rows < Matrix.GetLength(0); rows++)
-            {
-                Console.Write("│");
-                for (int cols = 0; cols < Matrix.GetLength(1); cols++)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(Matrix[rows, cols] == null ? " " : Matrix[rows, cols].Name);
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-                Console.Write("│");
-                Console.WriteLine();
-            }
-            Console.WriteLine("└" + "".PadRight(Matrix.GetLength(1), '─') + "┘");
+        internal List<Thief> GetReleasedPrisoners()
+        {
+            List<Thief> thieves = new();
 
             for (int i = 0; i < Prisoners.Count; i++)
             {
-                ((Thief)Prisoners[i]).PrisonCount--;
-                if (((Thief)Prisoners[i]).PrisonCount == 0)
+                Prisoners[i].Sentenced--;
+                if (Prisoners[i].Sentenced is 0)
                 {
-                    persons.Add((Thief)Prisoners[i]);
-                    Prisoners.Remove((Thief)Prisoners[i]);
+                    thieves.Add(Prisoners[i]);
+                    Prisoners.Remove(Prisoners[i]);
                 }
-            };
+            }
+            return thieves;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace TjuvarOchPoliser
 {
     internal class Thing
     {
+
     }
     internal class Phone : Thing
     {
