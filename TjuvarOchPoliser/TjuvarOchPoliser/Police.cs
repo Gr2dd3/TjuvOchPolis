@@ -10,6 +10,7 @@ namespace TjuvarOchPoliser
     internal class Police : Person
     {
         public List<Thing> Seized { get; set; }
+
         public Police(Random random) : base(random)
         {
             Seized = new List<Thing>();

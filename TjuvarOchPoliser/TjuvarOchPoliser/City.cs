@@ -36,17 +36,17 @@ namespace TjuvarOchPoliser
             List<Person> people = new();
             Batman batman = new(_random);
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Police police = new(_random);
                 people.Add(police);
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Citizen citizen = new(_random);
                 people.Add(citizen);
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 15; i++)
             {
                 Thief thief = new(_random);
                 people.Add(thief);
@@ -105,7 +105,9 @@ namespace TjuvarOchPoliser
         {
             _prison.Matrix = new Person[10, 20];
 
+            // Tar alla av typ tjuv till ny lista thieves
             List<Thief> thieves = people.OfType<Thief>().ToList();
+            // Tar alla som IsArrested = true till ny lista isArrested
             List<Thief> isArrested = thieves.Where(thief => thief.IsArrested).ToList();
             _prison.PutThievesInPrison(people, isArrested);
 
@@ -302,7 +304,7 @@ namespace TjuvarOchPoliser
             }
             Console.ResetColor();
 
-            batman.Counter++;
+            batman.Counter += 2;
         }
 
         // Endast en utskriftskontroll
