@@ -262,9 +262,9 @@ namespace TjuvarOchPoliser
             }
             else
             {
-                Console.WriteLine(action + "               ");
+                Console.WriteLine(action + "                                   ");
 
-                //Thread.Sleep(2500);
+                Thread.Sleep(2000);
                 action = "";
             }
         }
@@ -284,6 +284,8 @@ namespace TjuvarOchPoliser
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.SetCursorPosition(25, 35);
                 Console.WriteLine("Press B to deploy BATMAN");
+                Console.SetCursorPosition(25, 36);
+                Console.WriteLine("                                    ");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
