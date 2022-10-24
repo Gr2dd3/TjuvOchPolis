@@ -26,17 +26,10 @@ namespace TjuvarOchPoliser
 
         public void Run()
         {
-<<<<<<< Updated upstream
             List<Person> persons = new();
             Person p = new Person();
             Prison prison = new();
             Batman batman = new();
-=======
-            List<Person> people = new();
-            Batman batman = new(_random);
-            Joker joker = new(_random);
-            Hero hero = new(_random);
->>>>>>> Stashed changes
 
             for (int i = 0; i < 10; i++)
             {
@@ -49,11 +42,7 @@ namespace TjuvarOchPoliser
                 Citizen citizen = new();
                 persons.Add(citizen);
             }
-<<<<<<< Updated upstream
             for (int i = 0; i < 25; i++)
-=======
-            for (int i = 0; i < 20; i++)
->>>>>>> Stashed changes
             {
                 Thief thief = new();
                 persons.Add(thief);
@@ -70,15 +59,7 @@ namespace TjuvarOchPoliser
                 DrawMatrix();
                 prison.Draw(persons);
 
-<<<<<<< Updated upstream
                 p.Move(persons, Matrix);
-=======
-                WriteAction();
-
-                MovePeopleInCity(people, Matrix);
-
-                DeployTimer(hero, batman, joker, people);
->>>>>>> Stashed changes
 
                 DrawAction(prison);
                 persons = batman.BatDeployTimer(persons, batman);
@@ -121,32 +102,8 @@ namespace TjuvarOchPoliser
                 }
                 action = police.Seize(person, Matrix, rows, cols, action, persons, prison);
             }
-<<<<<<< Updated upstream
             // Batman
             if (person is Batman && Matrix[rows, cols] is Thief || person is Thief && Matrix[rows, cols] is Batman)
-=======
-
-            // TurnEvil()
-            if (person is Joker && otherPerson is Citizen)
-            {
-                TurnEvil((Joker)person, (Citizen)otherPerson, people);
-            }
-            else if (person is Citizen && otherPerson is Joker)
-            {
-                TurnEvil((Joker)otherPerson, (Citizen)person, people);  
-            }
-        }
-
-        private void TurnEvil(Joker joker, Citizen citizen, List<Person> people)
-        {
-                action = "The Joker strips you of the loot and turn you into a thief!";
-                joker.TurnEvil(citizen, people, _random);
-        }
-
-        private void Rob(Thief thief, Citizen citizen)
-        {
-            if (citizen.Belongings.Count > 0)
->>>>>>> Stashed changes
             {
                 Batman batman = new();
 
@@ -182,25 +139,7 @@ namespace TjuvarOchPoliser
             Console.WriteLine("└" + "".PadRight(Matrix.GetLength(1), '─') + "┘");
         }
 
-<<<<<<< Updated upstream
         private void DrawAction(Prison prison)
-=======
-        public void MovePeopleInCity(List<Person> people, Person[,] matrix)
-        {
-            foreach (var person in people)
-            {
-                if (person is Batman || person is Joker)
-                {
-                    person.Direction[0] = _random.Next(-1, 2);
-                    person.Direction[1] = _random.Next(-1, 2);
-                }
-
-                person.Move(matrix);
-            }
-        }
-
-        private void WriteAction()
->>>>>>> Stashed changes
         {
             Console.CursorVisible = false;
 
@@ -213,7 +152,6 @@ namespace TjuvarOchPoliser
                 Console.SetCursorPosition(25, 28);
                 Console.WriteLine(action + "               ");
 
-<<<<<<< Updated upstream
 
                 Thread.Sleep(2500);
                 action = null;
@@ -222,60 +160,9 @@ namespace TjuvarOchPoliser
             {
                 Console.SetCursorPosition(25, 28);
                 Console.WriteLine("".PadRight(90, ' '));
-=======
-                Thread.Sleep(2000);
-                action = "";
+
+
             }
-        }
-
-        public void DeployTimer(Hero hero, Batman batman, Joker joker, List<Person> persons)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            if (hero.Counter < 100)
-            {
-                Console.SetCursorPosition(25, 35);
-                Console.WriteLine("LOADING REINFORCEMENTS");
-                Console.SetCursorPosition(25, 36);
-                Console.WriteLine($"{hero.Counter}%");
-            }
-            else if (hero.Counter == 100)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.SetCursorPosition(25, 35);
-                Console.WriteLine("Press B to deploy BATMAN");
-                Console.SetCursorPosition(25, 36);
-                Console.WriteLine("Press J to deploy THE JOKER");
->>>>>>> Stashed changes
-
-
-<<<<<<< Updated upstream
-            }
-=======
-                switch (key.KeyChar)
-                {
-                    case 'b':
-                        persons.Add(batman);
-                        Console.SetCursorPosition(25, 35);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        Console.SetCursorPosition(25, 36);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        hero.Counter = 0;
-                        break;
-
-                    case 'j':
-                        persons.Add(joker);
-                        Console.SetCursorPosition(25, 35);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        Console.SetCursorPosition(25, 36);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        hero.Counter = 0;
-                        break;
-                }
-            }
-            Console.ResetColor();
-
-            hero.Counter++;
->>>>>>> Stashed changes
         }
 
         // Endast en utskriftskontroll

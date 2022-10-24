@@ -31,13 +31,8 @@ namespace TjuvarOchPoliser
                 Random r = new Random();
                 while (Matrix[prisoner.YPos, prisoner.XPos] != null)
                 {
-<<<<<<< Updated upstream
                     prisoner.XPos = r.Next(Matrix.GetLength(1));
                     prisoner.YPos = r.Next(Matrix.GetLength(0));
-=======
-                    prisoner.XPos = random.Next(Matrix.GetLength(1));
-                    prisoner.YPos = random.Next(Matrix.GetLength(0));
->>>>>>> Stashed changes
                 }
                 Matrix[prisoner.YPos, prisoner.XPos] = prisoner;
             }
