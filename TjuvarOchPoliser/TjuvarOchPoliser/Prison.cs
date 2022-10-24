@@ -39,8 +39,8 @@ namespace TjuvarOchPoliser
             {
                 while (Matrix[prisoner.YPos, prisoner.XPos] is not null)
                 {
-                    Matrix[prisoner.YPos, prisoner.XPos].XPos = random.Next(Matrix.GetLength(1));
-                    Matrix[prisoner.YPos, prisoner.XPos].YPos = random.Next(Matrix.GetLength(0));
+                    prisoner.XPos = random.Next(Matrix.GetLength(1));
+                    prisoner.YPos = random.Next(Matrix.GetLength(0));
                 }
                 Matrix[prisoner.YPos, prisoner.XPos] = prisoner;
             }
