@@ -10,7 +10,7 @@ namespace TjuvarOchPoliser
     {
         public List<Thing> Belongings { get; set; }
         
-        public Citizen()
+        public Citizen(Random random) : base(random)
         {
             Belongings = new List<Thing>();
             Belongings.Add(new Phone());
@@ -18,6 +18,7 @@ namespace TjuvarOchPoliser
             Belongings.Add(new Watch());
             Belongings.Add(new Wallet());
 
+            Color = ConsoleColor.Green;
             Name = "C";
         }
     }

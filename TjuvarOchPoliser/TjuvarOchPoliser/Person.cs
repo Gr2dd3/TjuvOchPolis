@@ -13,11 +13,10 @@ namespace TjuvarOchPoliser
         public int XPos { get; set; }
         public int YPos { get; set; }
         public string Name { get; set; }
+        public ConsoleColor Color { get; set; }
 
-        public Person()
+        public Person(Random random)
         {
-            Random random = new();
-
             XPos = random.Next(100);
             YPos = random.Next(25);
 
@@ -25,37 +24,35 @@ namespace TjuvarOchPoliser
             Direction[0] = random.Next(-1, 2);
             Direction[1] = random.Next(-1, 2);
 
+            Color = ConsoleColor.White;
             Name = "X";
         }
 
-        public void Move(List<Person> listOfPeople, Person[,] matrix)
+        public void Move(Person[,] matrix)
         {
-            foreach (var person in listOfPeople)
+            YPos += Direction[0];
+            XPos += Direction[1];
+
+            CheckOutOfBounds(matrix);
+        }
+
+        private void CheckOutOfBounds(Person[,] matrix)
+        {
+            if (YPos >= matrix.GetLength(0))
             {
-                if (person is Batman)
-                {
-
-                }
-                person.YPos += person.Direction[0];
-                person.XPos += person.Direction[1];
-
-                if (person.YPos == matrix.GetLength(0))
-                {
-                    person.YPos = 0;
-                }
-                if (person.YPos < 0)
-                {
-                    person.YPos = matrix.GetLength(0) - 1;
-                }
-                if (person.XPos == matrix.GetLength(1))
-                {
-                    person.XPos = 0;
-                }
-                if (person.XPos < 0)
-                {
-                    person.XPos = matrix.GetLength(1) - 1;
-                }
-
+                YPos = 0;
+            }
+            else if (YPos < 0)
+            {
+                YPos = matrix.GetLength(0) - 1;
+            }
+            if (XPos >= matrix.GetLength(1))
+            {
+                XPos = 0;
+            }
+            else if (XPos < 0)
+            {
+                XPos = matrix.GetLength(1) - 1;
             }
         }
     }
