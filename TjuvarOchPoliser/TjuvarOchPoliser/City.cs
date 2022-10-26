@@ -16,6 +16,9 @@ namespace TjuvarOchPoliser
     {
         public int RobbedCounter { get; set; }
         public int SeizedCounter { get; set; }
+        public int SeizedByBatman { get; set; }
+        public bool ListHasBatman { get; set; }
+        public bool CheckForBatman { get; set; }
         public Person[,] Matrix { get; set; }
 
         private readonly Prison _prison;
@@ -34,19 +37,21 @@ namespace TjuvarOchPoliser
         public void Run()
         {
             List<Person> people = new();
+            Hero hero = new(_random);
             Batman batman = new(_random);
 
-            for (int i = 0; i < 15; i++)
+
+            for (int i = 0; i < 5; i++)
             {
                 Police police = new(_random);
                 people.Add(police);
             }
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Citizen citizen = new(_random);
                 people.Add(citizen);
             }
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 45; i++)
             {
                 Thief thief = new(_random);
                 people.Add(thief);
@@ -66,9 +71,9 @@ namespace TjuvarOchPoliser
 
                 WriteAction();
 
-                MovePeopleInCity(people, Matrix);
 
-                DeployTimer(batman, people);
+                DeployTimer(hero, batman, people);
+
 
                 Thread.Sleep(200);
             }
@@ -125,6 +130,7 @@ namespace TjuvarOchPoliser
         // OBS! Vi hanterar ej mer än två möten på samma plats
         private void PutPeopleInMatrix(List<Person> people)
         {
+            Thief thief = new(_random);
             for (int i = 0; i < people.Count; i++)
             {
                 Person otherPerson = Matrix[people[i].YPos, people[i].XPos];
@@ -137,12 +143,12 @@ namespace TjuvarOchPoliser
                 {
                     Matrix[people[i].YPos, people[i].XPos] = new Person(_random);
 
-                    Collide(otherPerson, people[i], people);
+                    Collide(otherPerson, people[i], thief, people);
                 }
             }
         }
 
-        private void Collide(Person person, Person otherPerson, List<Person> people)
+        private void Collide(Person person, Person otherPerson, Thief thief, List<Person> people)
         {
             // Rob()
             if (person is Thief && otherPerson is Citizen)
@@ -157,22 +163,38 @@ namespace TjuvarOchPoliser
             // Seize()
             if (person is Police && otherPerson is Thief)
             {
-                Seize((Police)person, (Thief)otherPerson, people);
+                Seize((Police)person, (Thief)otherPerson);
             }
             else if (person is Thief && otherPerson is Police)
             {
-                Seize((Police)otherPerson, (Thief)person, people);
+                Seize((Police)otherPerson, (Thief)person);
             }
 
             // KaPow()
             if (person is Batman && otherPerson is Thief)
             {
-                KaPow((Batman)person, (Thief)otherPerson, people);
+                KaPow((Batman)person, (Thief)otherPerson);
             }
             else if (person is Thief && otherPerson is Batman)
             {
-                KaPow((Batman)otherPerson, (Thief)person, people);
+                KaPow((Batman)otherPerson, (Thief)person);
             }
+
+            // TurnEvil()
+            if (person is Joker && otherPerson is Citizen)
+            {
+                TurnEvil((Joker)person, (Citizen)otherPerson, thief, people);
+            }
+            else if (person is Citizen && otherPerson is Joker)
+            {
+                TurnEvil((Joker)otherPerson, (Citizen)person, thief, people);
+            }
+        }
+
+        private void TurnEvil(Joker joker, Citizen citizen, Thief thief, List<Person> people)
+        {
+            action = "The Joker just turned a citizen into a thief!";
+            joker.TurnEvil(citizen, thief, people);
         }
 
         private void Rob(Thief thief, Citizen citizen)
@@ -185,7 +207,7 @@ namespace TjuvarOchPoliser
             }
         }
 
-        private void Seize(Police police, Thief thief, List<Person> people)
+        private void Seize(Police police, Thief thief)
         {
             if (thief.Loot.Count > 0)
             {
@@ -195,16 +217,11 @@ namespace TjuvarOchPoliser
             }
         }
 
-        private void KaPow(Batman batman, Thief thief, List<Person> people)
+        private void KaPow(Batman batman, Thief thief)
         {
-            if (thief.Loot.Count == 0)
-            {
-                action = "Batman want to kill the thief for being a bad thief";
-            }
-            else
-            {
-                batman.KaPow(thief, people);
-            }
+            action = "Batman KaPows the thief and send him straight to jail!";
+            SeizedByBatman++;
+            batman.KaPow(thief);
         }
 
         private void DrawCity()
@@ -238,7 +255,7 @@ namespace TjuvarOchPoliser
         {
             foreach (var person in people)
             {
-                if (person is Batman)
+                if (person is Batman || person is Joker)
                 {
                     person.Direction[0] = _random.Next(-1, 2);
                     person.Direction[1] = _random.Next(-1, 2);
@@ -248,14 +265,19 @@ namespace TjuvarOchPoliser
             }
         }
 
+
         private void WriteAction()
         {
             Console.CursorVisible = false;
 
-            Console.SetCursorPosition(25, 30);
+            Console.SetCursorPosition(1, 39);
             Console.WriteLine("Number of inmates: " + _prison.Prisoners.Count + "       ");
-            Console.SetCursorPosition(25, 31);
+            Console.SetCursorPosition(1, 40);
             Console.WriteLine("Number of robberies: " + RobbedCounter);
+            Console.SetCursorPosition(1, 41);
+            Console.WriteLine("Number of Batman arrests: " + SeizedByBatman);
+
+
 
             Console.SetCursorPosition(25, 28);
             if (string.IsNullOrEmpty(action))
@@ -271,44 +293,39 @@ namespace TjuvarOchPoliser
             }
         }
 
-        public void DeployTimer(Batman batman, List<Person> persons)
+        private static void DeployTimer(Hero hero, Batman batman, List<Person> people)
         {
+
             Console.ForegroundColor = ConsoleColor.Blue;
-            if (batman.Counter < 100)
+            if (hero.Counter < 100)
             {
-                Console.SetCursorPosition(25, 35);
+                Console.SetCursorPosition(65, 27);
                 Console.WriteLine("LOADING REINFORCEMENTS");
-                Console.SetCursorPosition(25, 36);
-                Console.WriteLine($"{batman.Counter}%");
+                Console.SetCursorPosition(65, 28);
+                Console.WriteLine($"{hero.Counter}%");
             }
-            else if (batman.Counter == 100)
+            else if (hero.Counter == 100)
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.SetCursorPosition(25, 35);
+                hero.HeroSwitch(people, hero, batman);
+                Console.SetCursorPosition(65, 27);
                 Console.WriteLine("Press B to deploy BATMAN");
-                Console.SetCursorPosition(25, 36);
-                Console.WriteLine("                                    ");
 
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                Console.ResetColor();
+                hero.Counter += 10;
 
-                switch (key.KeyChar)
-                {
-                    case 'b':
-                        persons.Add(batman);
-                        Console.SetCursorPosition(25, 35);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        Console.SetCursorPosition(25, 36);
-                        Console.WriteLine("".PadRight(90, ' '));
-                        break;
-                }
             }
-            Console.ResetColor();
-
-            batman.Counter += 2;
         }
-
+        //case 'j':
+        //    people.Add(joker);
+        //    Console.SetCursorPosition(65, 27);
+        //    Console.WriteLine("".PadRight(90, ' '));
+        //    Console.SetCursorPosition(65, 28);
+        //    Console.WriteLine("".PadRight(90, ' '));
+        //    hero.Counter = 0;
+        //    break;
         // Endast en utskriftskontroll
-        private void ActionList(List<Person> people)
+        private static void ActionList(List<Person> people)
         {
             int counter = 1;
             foreach (Person person in people)

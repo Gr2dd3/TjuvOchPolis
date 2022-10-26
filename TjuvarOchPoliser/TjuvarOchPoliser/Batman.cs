@@ -21,25 +21,18 @@ namespace TjuvarOchPoliser
             Name = "B";
         }
 
-        public string KaPow(Thief thief, List<Person> people)
+        internal void KaPow(Thief thief)
         {
-            string action = "";
-            if (thief.Loot.Count > 3)
-            {
-                action = "KaPOW! Thief dies and Batman adds the stuff to his Utility Belt!";
-                people.Remove(thief);
-            }
-            else
-            {
-                action = "Batman roughs the thief up a bit!! Oh, and he adds the stuff to his Utility Belt!!";
-            }
-
+            thief.Sentenced = thief.Loot.Count * 30;
             UtilityBelt.AddRange(thief.Loot);
             thief.Loot.Clear();
-
-            return action;
+            thief.IsArrested = true;
         }
 
+        internal void DeployBatman(List<Person> people, Batman batman)
+        {
+            people.Add(batman);
+        }
     }
 }
 
